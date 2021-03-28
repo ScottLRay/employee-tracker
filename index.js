@@ -28,7 +28,7 @@ function init() {
         choices: [
           "View All Employees?",
           "View All Employee's By Roles?",
-          "View all Emplyees By Departments",
+          "View all Employees By Departments",
           "Update Employee",
           "Add Employee?",
           "Add Role?",
@@ -44,8 +44,11 @@ function init() {
         case "View All Employee's By Roles?":
           viewALLRoles();
           break;
-        case "View all Emplyees By Departments":
+        case "View all Employees By Departments":
           viewALLDepartment();
+          break;
+        case "Update Employee":
+          updateEmployee();
           break;
         case "Add Employee?":
           addEmployee();
@@ -212,4 +215,52 @@ function addDepartment() {
         }
       );
     });
+}
+
+function updateEmployee() {
+  connection.query(
+    "SELECT employees.last_name, role.title FROM employees JOIN role ON employees.role_id = role.id;",
+    function (err, res) {
+      if (err) throw err;
+      console.log(res);
+      inquirer
+        .prompt([
+          {
+            type: "rawlist",
+            name: "lastName",
+            message: "What is the Employee's last name?",
+            choices: function () {
+              var lastName = [];
+              for (var i = 0; i < res.length; i++) {
+                lastName.push(res[i].last_name);
+              }
+              return lastName;
+            },
+          },
+          {
+            name: "role",
+            type: "rawlist",
+            message: "What is the Employees new title?",
+            choices: selectRole(),
+          },
+        ])
+        .then(function (val) {
+          let roleId = selectRole().indexOf(val.role) + 1;
+          connection.query(
+            "UPDATE employees SET WHERE ?",
+            {
+              last_name: val.lastName,
+            },
+            {
+              role_id: roleId,
+            },
+            function (err) {
+              if (err) throw err;
+              console.table(val);
+              init();
+            }
+          );
+        });
+    }
+  );
 }
