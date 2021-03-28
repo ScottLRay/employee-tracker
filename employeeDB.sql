@@ -9,13 +9,13 @@ USE employeeDB;
 
 CREATE TABLE department (
     id INT NOT NULL auto_increment PRIMARY KEY,
-    department_name varchar(255)
+    name varchar(255)
 );
 
 CREATE TABLE role (
     id INT NOT NULL auto_increment PRIMARY KEY,
     title varchar(30),
-    salary DECIMAL(6,2),
+    salary DECIMAL,
     department_id INT,
     FOREIGN KEY (department_id) REFERENCES department(id)
 );
@@ -27,7 +27,7 @@ CREATE TABLE employees (
     role_id INT,
     manager_id INT,
     FOREIGN KEY (role_id) REFERENCES role(id),
-    FOREIGN KEY (manager_id) REFERENCES manager(id)
+    FOREIGN KEY (manager_id) REFERENCES employees(id)
 );
 
 -- seeding for department
@@ -56,23 +56,23 @@ VALUE ("Software Engineer", 120000, 2);
 INSERT INTO role (title, salary, department_id)
 VALUE ("Lawyer", 190000, 4);
 
--- seeding for employee
-INSERT INTO employee (first_name, last_name, manager_id, role_id)
+-- seeding for employees
+INSERT INTO employees (first_name, last_name, manager_id, role_id)
 VALUE ("Jessica", "Haze", null, 1);
-INSERT INTO employee (first_name, last_name, manager_id, role_id)
+INSERT INTO employees (first_name, last_name, manager_id, role_id)
 VALUE ("Tiffany", "Patric", null, 2);
-INSERT INTO employee (first_name, last_name, manager_id, role_id)
+INSERT INTO employees (first_name, last_name, manager_id, role_id)
 VALUE ("Mia","Lam",null,3);
-INSERT INTO employee (first_name, last_name, manager_id, role_id)
+INSERT INTO employees (first_name, last_name, manager_id, role_id)
 VALUE ("Bently", "Lao", 1, 4);
-INSERT INTO employee (first_name, last_name, manager_id, role_id)
+INSERT INTO employees (first_name, last_name, manager_id, role_id)
 VALUE ("Chris", "Melby", 4, 5);
-INSERT INTO employee (first_name, last_name, manager_id, role_id)
+INSERT INTO employees (first_name, last_name, manager_id, role_id)
 VALUE ("Jason", "Baker", 1, 6);
-INSERT INTO employee (first_name, last_name, manager_id, role_id)
+INSERT INTO employees (first_name, last_name, manager_id, role_id)
 VALUE ("Tom", "Nice", 2, 7);
 
 -- sql workbench
 SELECT * FROM department;
 SELECT * FROM role;
-SELECT * FROM employee;
+SELECT * FROM employees;
