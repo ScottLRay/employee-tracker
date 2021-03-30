@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
-const cTable = require("console.table");
+const util = require("util");
 
 //connecting to employeeDB.sql
 const connection = mysql.createConnection({
@@ -10,6 +10,8 @@ const connection = mysql.createConnection({
   password: "",
   database: "employeeDB",
 });
+
+connection.query = util.promisify(connection.query);
 
 //if cant connect then throw error
 connection.connect((err) => {
@@ -244,19 +246,14 @@ function updateEmployee() {
             choices: selectRole(),
           },
         ])
-        .then(function (val) {
-          let roleId = selectRole().indexOf(val.role) + 1;
+        .then(async function (val) {
+          let roleId = (await selectRole().indexOf(val.role)) + 1;
+
           connection.query(
-            "UPDATE employees SET WHERE ?",
-            {
-              last_name: val.lastName,
-            },
-            {
-              role_id: roleId,
-            },
-            function (err) {
+            `UPDATE employees SET role_id = "${roleId}" WHERE last_name = "${val.lastName}"`,
+            (err, val) => {
               if (err) throw err;
-              console.table(val);
+              console.log(val.affectedRows);
               init();
             }
           );
