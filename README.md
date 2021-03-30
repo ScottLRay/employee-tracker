@@ -16,7 +16,7 @@ I want to be able to view and manage the departments, roles, and employees in my
 So that I can organize and plan my business
 ```
 
-## Inatallion
+## Installion
 
 make sure you have node.js already installed also you will need to install mysql:
 
